@@ -5,7 +5,7 @@ file_path = 'IncidentPractice.xlsx'
 output_file_path = 'output.html'
 
 # Read the Excel file
-xls = pd.ExcelFile(file_path, engine='xlrd')
+xls = pd.ExcelFile(file_path, engine='openpyxl')
 
 # Custom sheet names
 sheet_names = ["MIM Handover at 7 30 GMT", "MIM Handover at 16 30 GMT"]
@@ -86,6 +86,18 @@ html_content = """
         }
         th {
             background-color: #f2f2f2;
+            width: 40%;
+        }
+        td {
+            width: 60%;
+            word-break: break-word; /* Ensure words break to fit within the cell */
+        }
+        input[type="text"] {
+            width: calc(100% - 20px); /* Adjust the width of the input box */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            white-space: pre-wrap; /* Ensure long text wraps within the input box */
+            height: auto; /* Adjust height to fit content */
+            overflow: hidden; /* Hide overflow */
         }
         h3 {
             text-align: center;
