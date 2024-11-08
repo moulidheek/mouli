@@ -10,6 +10,9 @@ xls = pd.ExcelFile(file_path, engine='xlrd')
 # Custom sheet names
 sheet_names = ["MIM Handover at 7 30 GMT", "MIM Handover at 16 30 GMT"]
 
+# GSK company orange color
+gsk_orange = "#f36f21"
+
 # Generate HTML content
 html_content = """
 <!DOCTYPE html>
@@ -25,10 +28,30 @@ html_content = """
             margin: 0;
             padding: 20px;
         }
+        h1 {
+            text-align: center;
+            color: white;
+            background-color: """ + gsk_orange + """;
+            padding: 10px;
+            position: relative;
+        }
+        h1 img {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            height: 100%;
+        }
+        h2 {
+            text-align: center;
+            color: white;
+            background-color: """ + gsk_orange + """;
+            padding: 5px;
+        }
         .tab-buttons {
             display: flex;
             cursor: pointer;
             margin-bottom: 20px;
+            justify-content: center;
         }
         .tab-buttons div {
             padding: 10px 20px;
@@ -64,12 +87,11 @@ html_content = """
         th {
             background-color: #f2f2f2;
         }
-        h1, h2 {
+        h3 {
             text-align: center;
-            color: #333;
-        }
-        h2 {
-            margin-top: 0;
+            color: white;
+            background-color: """ + gsk_orange + """;
+            padding: 5px;
         }
         .spacer {
             height: 20px;
@@ -77,7 +99,7 @@ html_content = """
     </style>
 </head>
 <body>
-    <h1>Digital & Tech Command Center</h1>
+    <h1>Digital & Tech Command Center<img src="gsk_logo.jfif" alt="GSK Logo"></h1>
     <h2>Daily Status News Board</h2>
     <div class="tab-buttons" id="tab-buttons">"""
 
@@ -95,7 +117,7 @@ for index, sheet_name in enumerate(xls.sheet_names[:2]):
     p2_incidents = df[df.iloc[:, 5] == 'P2']
     
     if not major_incidents.empty:
-        html_content += '<h2>Major</h2>'
+        html_content += '<h3>Major</h3>'
         for _, row in major_incidents.iterrows():
             html_content += """
             <table>
@@ -109,7 +131,7 @@ for index, sheet_name in enumerate(xls.sheet_names[:2]):
             """.format(row[0], row[1], row[2], row[3], row[4])
     
     if not p2_incidents.empty:
-        html_content += '<h2>P2</h2>'
+        html_content += '<h3>P2</h3>'
         for _, row in p2_incidents.iterrows():
             html_content += """
             <table>
