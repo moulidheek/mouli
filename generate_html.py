@@ -8,7 +8,7 @@ output_file_path = 'output.html'
 xls = pd.ExcelFile(file_path, engine='xlrd')
 
 # Custom sheet names
-sheet_names = ["MIM Handover at 7 30 GMT", "MIM Handover at 16 30 GMT", "Process updates"]
+sheet_names = ["MIM Handover at 7 30 GMT", "MIM Handover at 16 30 GMT"]
 
 # Generate HTML content
 html_content = """
@@ -64,8 +64,12 @@ html_content = """
         th {
             background-color: #f2f2f2;
         }
-        h2 {
+        h1, h2 {
+            text-align: center;
             color: #333;
+        }
+        h2 {
+            margin-top: 0;
         }
         .spacer {
             height: 20px;
@@ -73,6 +77,8 @@ html_content = """
     </style>
 </head>
 <body>
+    <h1>Digital & Tech Command Center</h1>
+    <h2>Daily Status News Board</h2>
     <div class="tab-buttons" id="tab-buttons">"""
 
 for index, sheet_name in enumerate(xls.sheet_names[:2]):
@@ -80,9 +86,6 @@ for index, sheet_name in enumerate(xls.sheet_names[:2]):
     html_content += '<div class="tab-button" onclick="showTab({})">{}</div>'.format(index, custom_name)
 
 html_content += '</div><div id="tabs">'
-
-# Read the process updates sheet
-process_updates_df = pd.read_excel(xls, xls.sheet_names[2], usecols="B:F")
 
 for index, sheet_name in enumerate(xls.sheet_names[:2]):
     df = pd.read_excel(xls, sheet_name, usecols="B:G")  # Read from column two only (B to G)
@@ -118,29 +121,6 @@ for index, sheet_name in enumerate(xls.sheet_names[:2]):
             </table>
             <div class="spacer"></div>
             """.format(row[0], row[1], row[2], row[3], row[4])
-
-    # Add process updates
-    if index == 0 and len(process_updates_df) > 1:
-        process_update_row = process_updates_df.iloc[1]
-        html_content += '<h2>Process Updates</h2>'
-        html_content += """
-        <table>
-            <tr><th>Introduced on:</th><td><input type="text" value="{}" readonly></td></tr>
-            <tr><th>Current Process Updates:</th><td><input type="text" value="{}" readonly></td></tr>
-        </table>
-        <div class="spacer"></div>
-        """.format(process_update_row[0], process_update_row[1])
-    
-    if index == 1 and len(process_updates_df) > 2:
-        process_update_row = process_updates_df.iloc[2]
-        html_content += '<h2>Process Updates</h2>'
-        html_content += """
-        <table>
-            <tr><th>Introduced on:</th><td><input type="text" value="{}" readonly></td></tr>
-            <tr><th>Current Process Updates:</th><td><input type="text" value="{}" readonly></td></tr>
-        </table>
-        <div class="spacer"></div>
-        """.format(process_update_row[0], process_update_row[1])
 
     html_content += '</div>'
 
